@@ -1,0 +1,971 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ezeani D. Osita — Data Analyst</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #080B14;
+  --surface: #0D1117;
+  --surface2: #131923;
+  --border: rgba(255,255,255,0.07);
+  --cyan: #00D4FF;
+  --violet: #7B2FFF;
+  --cyan-dim: rgba(0,212,255,0.10);
+  --violet-dim: rgba(123,47,255,0.10);
+  --text: #E8EDF5;
+  --muted: #8892A4;
+  --green: #00FF94;
+  --orange: #FF6B35;
+  --fd: 'Space Grotesk', sans-serif;
+  --fb: 'Inter', sans-serif;
+  --fm: 'JetBrains Mono', monospace;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:var(--fb);font-size:16px;line-height:1.6;overflow-x:hidden;cursor:none}
+
+/* CURSOR */
+#cur{position:fixed;width:9px;height:9px;background:var(--cyan);border-radius:50%;pointer-events:none;z-index:9999;mix-blend-mode:difference;transition:transform .1s}
+#curR{position:fixed;width:34px;height:34px;border:1.5px solid rgba(0,212,255,.35);border-radius:50%;pointer-events:none;z-index:9998;transition:all .15s ease}
+
+/* LOADER */
+#loader{position:fixed;inset:0;background:var(--bg);z-index:10000;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:20px;transition:opacity .6s}
+.l-logo{font-family:var(--fd);font-size:2rem;font-weight:700;color:var(--cyan);letter-spacing:-.02em}
+.l-bar-wrap{width:180px;height:2px;background:var(--surface2);border-radius:99px;overflow:hidden}
+.l-bar{height:100%;width:0;background:linear-gradient(90deg,var(--cyan),var(--violet));border-radius:99px;animation:ld 1.4s ease forwards}
+@keyframes ld{to{width:100%}}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:0 5vw;height:66px;display:flex;align-items:center;justify-content:space-between;background:rgba(8,11,20,.88);backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}
+.nav-logo{font-family:var(--fd);font-weight:700;font-size:1.05rem;color:var(--text);text-decoration:none;display:flex;align-items:center;gap:10px}
+.nav-logo-dot{width:7px;height:7px;background:var(--cyan);border-radius:50%;box-shadow:0 0 8px var(--cyan);animation:pulse 2s infinite}
+.nav-logo span{color:var(--cyan)}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(1.4)}}
+.nav-links{display:flex;gap:2rem;list-style:none}
+.nav-links a{color:var(--muted);text-decoration:none;font-size:.85rem;font-weight:500;transition:color .2s;position:relative}
+.nav-links a::after{content:'';position:absolute;bottom:-4px;left:0;width:0;height:1.5px;background:var(--cyan);transition:width .3s}
+.nav-links a:hover,.nav-links a.active{color:var(--cyan)}
+.nav-links a:hover::after,.nav-links a.active::after{width:100%}
+.nav-cta{padding:7px 18px;border:1.5px solid var(--cyan) !important;border-radius:6px;color:var(--cyan) !important;font-size:.78rem !important}
+.nav-cta:hover{background:var(--cyan-dim) !important}
+.hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:4px}
+.hamburger span{display:block;width:22px;height:2px;background:var(--text);border-radius:2px;transition:all .3s}
+.mob-menu{display:none;position:fixed;top:66px;left:0;right:0;background:rgba(8,11,20,.97);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);padding:1.5rem 5vw;z-index:999}
+.mob-menu.open{display:block}
+.mob-menu ul{list-style:none;display:flex;flex-direction:column;gap:1rem}
+.mob-menu a{color:var(--muted);text-decoration:none;font-size:1rem;font-weight:500}
+.mob-menu a:hover{color:var(--cyan)}
+
+/* HERO */
+#hero{min-height:100vh;display:flex;align-items:center;padding:120px 5vw 80px;position:relative;overflow:hidden}
+.hero-bg{position:absolute;inset:0;background:radial-gradient(ellipse 60% 50% at 68% 50%,rgba(0,212,255,.055) 0%,transparent 70%),radial-gradient(ellipse 40% 40% at 18% 80%,rgba(123,47,255,.07) 0%,transparent 60%)}
+.hero-grid{position:absolute;inset:0;background-image:linear-gradient(var(--border) 1px,transparent 1px),linear-gradient(90deg,var(--border) 1px,transparent 1px);background-size:58px 58px;mask-image:radial-gradient(ellipse at center,black 30%,transparent 70%)}
+.hero-inner{position:relative;z-index:2;display:grid;grid-template-columns:1fr 380px;gap:4rem;align-items:center;max-width:1200px;margin:0 auto;width:100%}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:8px;font-family:var(--fm);font-size:.72rem;color:var(--cyan);letter-spacing:.15em;text-transform:uppercase;margin-bottom:1.5rem;padding:5px 13px;border:1px solid rgba(0,212,255,.22);border-radius:4px;background:var(--cyan-dim)}
+.hero-eyebrow::before{content:'> ';opacity:.55}
+.hero-h1{font-family:var(--fd);font-size:clamp(2.3rem,4.8vw,3.7rem);font-weight:700;line-height:1.1;letter-spacing:-.03em;margin-bottom:1.5rem}
+.hl{background:linear-gradient(135deg,var(--cyan) 0%,var(--violet) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero-terminal{font-family:var(--fm);font-size:.88rem;color:var(--muted);margin-bottom:2rem;min-height:26px}
+.hero-terminal .typed{color:var(--green)}
+.hero-terminal .tcur{display:inline-block;width:2px;height:1em;background:var(--cyan);margin-left:2px;animation:blink 1s step-end infinite;vertical-align:text-bottom}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
+.hero-desc{color:var(--muted);font-size:.95rem;line-height:1.75;margin-bottom:2.5rem;max-width:510px}
+.hero-btns{display:flex;gap:1rem;flex-wrap:wrap}
+.btn-p{padding:13px 26px;background:linear-gradient(135deg,var(--cyan),#0099BB);color:#000;font-weight:600;border:none;border-radius:7px;cursor:pointer;font-size:.88rem;font-family:var(--fb);transition:all .3s;text-decoration:none;display:inline-block}
+.btn-p:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(0,212,255,.28)}
+.btn-o{padding:13px 26px;background:transparent;color:var(--text);font-weight:500;border:1.5px solid var(--border);border-radius:7px;cursor:pointer;font-size:.88rem;font-family:var(--fb);transition:all .3s;text-decoration:none;display:inline-block}
+.btn-o:hover{border-color:var(--cyan);color:var(--cyan);background:var(--cyan-dim)}
+.hero-stats{display:flex;gap:2rem;margin-top:3rem;padding-top:2rem;border-top:1px solid var(--border)}
+.stat-n{font-family:var(--fd);font-size:1.75rem;font-weight:700;line-height:1}
+.stat-n span{color:var(--cyan)}
+.stat-l{font-size:.73rem;color:var(--muted);margin-top:4px}
+
+/* PROFILE CARD */
+.profile-card{background:var(--surface);border:1px solid var(--border);border-radius:18px;padding:2rem 1.75rem;text-align:center;position:relative;overflow:hidden}
+.profile-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--cyan),var(--violet))}
+.profile-img-wrap{width:160px;height:160px;border-radius:50%;margin:0 auto 1.25rem;position:relative}
+.profile-img-wrap::before{content:'';position:absolute;inset:-3px;border-radius:50%;background:linear-gradient(135deg,var(--cyan),var(--violet));z-index:0;animation:spin 5s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.profile-img-wrap::after{content:'';position:absolute;inset:-1px;border-radius:50%;background:var(--surface);z-index:1}
+.profile-img-wrap img{width:100%;height:100%;object-fit:cover;object-position:center top;border-radius:50%;position:relative;z-index:2;display:block}
+.profile-name{font-family:var(--fd);font-size:1.1rem;font-weight:700;margin-bottom:3px}
+.profile-role{font-size:.75rem;color:var(--cyan);font-family:var(--fm);margin-bottom:1.25rem}
+.profile-badges{display:flex;flex-wrap:wrap;gap:5px;justify-content:center;margin-bottom:1.25rem}
+.badge{padding:3px 9px;border-radius:4px;font-size:.68rem;font-weight:500;font-family:var(--fm)}
+.bc{background:var(--cyan-dim);color:var(--cyan);border:1px solid rgba(0,212,255,.18)}
+.bv{background:var(--violet-dim);color:#A855F7;border:1px solid rgba(168,85,247,.18)}
+.bg{background:rgba(0,255,148,.08);color:var(--green);border:1px solid rgba(0,255,148,.18)}
+.avail{display:flex;align-items:center;justify-content:center;gap:8px;font-size:.73rem;color:var(--muted);padding:7px 14px;border:1px solid var(--border);border-radius:6px;background:var(--surface2)}
+.avail-dot{width:7px;height:7px;background:var(--green);border-radius:50%;box-shadow:0 0 7px var(--green);animation:pulse 2s infinite}
+
+/* SECTION BASE */
+section{padding:96px 5vw}
+.s-inner{max-width:1200px;margin:0 auto}
+.s-tag{font-family:var(--fm);font-size:.7rem;color:var(--cyan);letter-spacing:.14em;text-transform:uppercase;margin-bottom:.6rem;display:block}
+.s-title{font-family:var(--fd);font-size:clamp(1.75rem,3.5vw,2.55rem);font-weight:700;letter-spacing:-.022em;line-height:1.2;margin-bottom:.9rem}
+.s-sub{color:var(--muted);max-width:550px;line-height:1.72;font-size:.93rem}
+.s-head{margin-bottom:3.5rem}
+
+/* ABOUT */
+#about{background:var(--surface)}
+.about-grid{display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:start}
+.about-text p{color:var(--muted);line-height:1.8;margin-bottom:1.2rem;font-size:.93rem}
+.about-text p strong{color:var(--text);font-weight:600}
+.about-meta{display:grid;grid-template-columns:1fr 1fr;gap:.75rem;margin-top:2rem}
+.am-item{padding:1rem 1.1rem;background:var(--surface2);border:1px solid var(--border);border-radius:10px;display:flex;align-items:flex-start;gap:10px}
+.am-icon{flex-shrink:0;margin-top:2px;opacity:.75}
+.am-title{font-size:.78rem;font-weight:600;color:var(--text);margin-bottom:2px}
+.am-desc{font-size:.7rem;color:var(--muted)}
+.skills-col{display:flex;flex-direction:column;gap:.9rem}
+.skill-row{display:flex;flex-direction:column;gap:5px}
+.skill-meta{display:flex;justify-content:space-between;font-size:.78rem}
+.skill-name{color:var(--text);font-weight:500;font-family:var(--fm)}
+.skill-pct{color:var(--cyan)}
+.skill-track{height:3px;background:var(--surface2);border-radius:99px;overflow:hidden}
+.skill-fill{height:100%;width:0;background:linear-gradient(90deg,var(--cyan),var(--violet));border-radius:99px;transition:width 1.4s cubic-bezier(.16,1,.3,1)}
+
+/* SKILLS SECTION */
+#skills{background:var(--bg)}
+.sc-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.25rem}
+.sc-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:1.6rem;transition:all .3s;position:relative;overflow:hidden}
+.sc-card::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--cyan),var(--violet));transform:scaleX(0);transform-origin:left;transition:transform .3s}
+.sc-card:hover::after{transform:scaleX(1)}
+.sc-card:hover{transform:translateY(-5px);border-color:rgba(0,212,255,.18);box-shadow:0 18px 48px rgba(0,0,0,.5)}
+.sc-icon-wrap{width:44px;height:44px;border-radius:10px;display:flex;align-items:center;justify-content:center;margin-bottom:.9rem}
+.ic-cyan{background:var(--cyan-dim)}
+.ic-violet{background:var(--violet-dim)}
+.ic-green{background:rgba(0,255,148,.08)}
+.ic-orange{background:rgba(255,107,53,.08)}
+.sc-title{font-family:var(--fd);font-size:.95rem;font-weight:600;margin-bottom:6px}
+.sc-desc{font-size:.78rem;color:var(--muted);line-height:1.62}
+.sc-tags{display:flex;flex-wrap:wrap;gap:5px;margin-top:.9rem}
+.sc-tag{font-size:.67rem;padding:3px 8px;background:var(--surface2);color:var(--muted);border-radius:4px;border:1px solid var(--border);font-family:var(--fm)}
+
+/* PROJECTS */
+#projects{background:var(--surface)}
+.proj-filter{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:2.25rem}
+.f-btn{padding:6px 15px;border:1.5px solid var(--border);border-radius:6px;background:transparent;color:var(--muted);font-size:.78rem;cursor:pointer;font-family:var(--fb);font-weight:500;transition:all .2s}
+.f-btn:hover,.f-btn.active{border-color:var(--cyan);color:var(--cyan);background:var(--cyan-dim)}
+.proj-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1.25rem}
+.proj-card{background:var(--bg);border:1px solid var(--border);border-radius:14px;overflow:hidden;transition:all .3s}
+.proj-card:hover{transform:translateY(-5px);border-color:rgba(0,212,255,.18);box-shadow:0 22px 55px rgba(0,0,0,.5)}
+.proj-thumb{height:170px;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center;background:var(--surface2)}
+.proj-thumb svg{position:absolute;inset:0;width:100%;height:100%}
+.proj-thumb-lbl{position:relative;z-index:2;font-family:var(--fd);font-size:1rem;font-weight:700;color:rgba(255,255,255,.12);letter-spacing:.04em}
+.proj-body{padding:1.4rem}
+.proj-cat{font-size:.67rem;font-family:var(--fm);color:var(--cyan);letter-spacing:.09em;text-transform:uppercase;margin-bottom:7px}
+.proj-title{font-family:var(--fd);font-size:1.02rem;font-weight:600;margin-bottom:7px;line-height:1.3}
+.proj-problem{font-size:.78rem;color:var(--muted);line-height:1.62;margin-bottom:.9rem}
+.proj-impact{display:flex;align-items:center;gap:8px;font-size:.76rem;color:var(--green);margin-bottom:.9rem;padding:7px 11px;background:rgba(0,255,148,.06);border-radius:6px;border:1px solid rgba(0,255,148,.13)}
+.proj-tools{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:1.1rem}
+.proj-tool{font-size:.66rem;padding:3px 7px;background:var(--surface2);color:var(--muted);border-radius:4px;font-family:var(--fm);border:1px solid var(--border)}
+.proj-actions{display:flex;gap:7px}
+.p-btn{flex:1;padding:8px 12px;border-radius:6px;font-size:.76rem;font-weight:500;cursor:pointer;transition:all .2s;text-align:center;text-decoration:none;display:block;font-family:var(--fb)}
+.p-btn-1{background:var(--cyan-dim);border:1.5px solid rgba(0,212,255,.28);color:var(--cyan)}
+.p-btn-1:hover{background:rgba(0,212,255,.18)}
+.p-btn-2{background:transparent;border:1.5px solid var(--border);color:var(--muted)}
+.p-btn-2:hover{border-color:var(--muted);color:var(--text)}
+
+/* DASHBOARD */
+#dashboard{background:var(--bg)}
+.dash-wrap{background:var(--surface);border:1px solid var(--border);border-radius:18px;overflow:hidden}
+.dash-bar{background:var(--surface2);border-bottom:1px solid var(--border);padding:11px 18px;display:flex;align-items:center;gap:7px}
+.dash-dot{width:11px;height:11px;border-radius:50%}
+.dash-bar-title{font-family:var(--fm);font-size:.72rem;color:var(--muted);margin-left:8px}
+.dash-body{padding:1.25rem;display:grid;grid-template-columns:repeat(5,1fr);grid-template-rows:auto 260px;gap:.9rem}
+.kpi{background:var(--surface2);border:1px solid var(--border);border-radius:11px;padding:1.1rem;transition:all .3s}
+.kpi:hover{border-color:rgba(0,212,255,.18)}
+.kpi-lbl{font-size:.67rem;color:var(--muted);margin-bottom:7px;font-family:var(--fm)}
+.kpi-val{font-family:var(--fd);font-size:1.5rem;font-weight:700;line-height:1;margin-bottom:5px}
+.kpi-ch{font-size:.68rem;font-weight:500}
+.up{color:var(--green)}.dn{color:#FF4444}
+.chart-main{background:var(--surface2);border:1px solid var(--border);border-radius:11px;padding:1.1rem;grid-column:span 3}
+.chart-side{background:var(--surface2);border:1px solid var(--border);border-radius:11px;padding:1.1rem;grid-column:span 2}
+.chart-hd{display:flex;justify-content:space-between;align-items:center;margin-bottom:1.1rem}
+.chart-hd-t{font-size:.78rem;font-weight:600;color:var(--text)}
+.chart-hd-p{font-size:.67rem;color:var(--muted);font-family:var(--fm)}
+
+/* EXPERIENCE */
+#experience{background:var(--surface)}
+.exp-grid{display:grid;grid-template-columns:1fr 1fr;gap:3rem}
+.exp-col-title{font-family:var(--fm);font-size:.7rem;color:var(--cyan);letter-spacing:.14em;text-transform:uppercase;margin-bottom:1.4rem;display:flex;align-items:center;gap:8px}
+.exp-col-title::after{content:'';flex:1;height:1px;background:var(--border)}
+.timeline{position:relative;padding-left:1.5rem}
+.timeline::before{content:'';position:absolute;left:0;top:0;bottom:0;width:1px;background:var(--border)}
+.tl-item{position:relative;padding-bottom:2.25rem;padding-left:1.5rem}
+.tl-item:last-child{padding-bottom:0}
+.tl-dot{position:absolute;left:-2rem;top:5px;width:10px;height:10px;border-radius:50%;background:var(--surface);border:2px solid rgba(255,255,255,.15);transition:all .3s}
+.tl-item:hover .tl-dot{background:var(--cyan);border-color:var(--cyan);box-shadow:0 0 10px rgba(0,212,255,.35)}
+.tl-date{font-family:var(--fm);font-size:.68rem;color:var(--cyan);letter-spacing:.04em;margin-bottom:5px}
+.tl-role{font-family:var(--fd);font-size:1rem;font-weight:600;margin-bottom:3px}
+.tl-org{font-size:.8rem;color:var(--muted);margin-bottom:.9rem}
+.tl-pts{list-style:none;display:flex;flex-direction:column;gap:5px}
+.tl-pts li{font-size:.79rem;color:var(--muted);line-height:1.55;padding-left:1.1rem;position:relative}
+.tl-pts li::before{content:'–';position:absolute;left:0;color:var(--cyan)}
+.certs{display:flex;flex-direction:column;gap:10px}
+.cert{display:flex;align-items:flex-start;gap:11px;padding:.9rem 1rem;background:var(--surface2);border:1px solid var(--border);border-radius:9px;transition:all .3s}
+.cert:hover{border-color:rgba(0,212,255,.18)}
+.cert-icon-wrap{width:34px;height:34px;border-radius:7px;background:var(--cyan-dim);border:1px solid rgba(0,212,255,.18);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.cert-title{font-size:.8rem;font-weight:600;margin-bottom:2px}
+.cert-org{font-size:.7rem;color:var(--muted);font-family:var(--fm)}
+
+/* ANALYTICS */
+#analytics{background:var(--bg)}
+.analytics-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1.25rem;margin-bottom:1.25rem}
+.plat-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:1.4rem}
+.plat-hd{display:flex;align-items:center;gap:10px;margin-bottom:1.4rem}
+.plat-icon{width:34px;height:34px;border-radius:8px;display:flex;align-items:center;justify-content:center}
+.plat-name{font-family:var(--fd);font-size:.88rem;font-weight:600}
+.plat-period{font-size:.68rem;color:var(--muted);font-family:var(--fm)}
+.metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.m-box{padding:11px;background:var(--surface2);border:1px solid var(--border);border-radius:9px}
+.m-lbl{font-size:.65rem;color:var(--muted);margin-bottom:3px;font-family:var(--fm)}
+.m-val{font-family:var(--fd);font-size:1.1rem;font-weight:700}
+.m-ch{font-size:.63rem;color:var(--green);margin-top:2px}
+.m-ch.dn{color:#FF4444}
+.insight-bar{padding:1.1rem 1.5rem;background:var(--surface);border:1px solid var(--border);border-radius:14px}
+.insight-bar p{font-size:.8rem;color:var(--muted);line-height:1.7}
+.insight-bar span{color:var(--cyan);font-family:var(--fm)}
+
+/* CONTACT */
+#contact{background:var(--surface)}
+.contact-grid{display:grid;grid-template-columns:1fr 1.45fr;gap:4rem}
+.contact-info h3{font-family:var(--fd);font-size:1.35rem;font-weight:700;margin-bottom:.9rem}
+.contact-info p{color:var(--muted);line-height:1.72;margin-bottom:2rem;font-size:.9rem}
+.c-links{display:flex;flex-direction:column;gap:10px}
+.c-link{display:flex;align-items:center;gap:11px;padding:11px 14px;background:var(--surface2);border:1px solid var(--border);border-radius:9px;text-decoration:none;transition:all .3s;color:var(--text)}
+.c-link:hover{border-color:rgba(0,212,255,.28);background:var(--cyan-dim);color:var(--cyan)}
+.c-link-icon{width:34px;height:34px;border-radius:7px;background:var(--cyan-dim);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.c-link-title{font-size:.73rem;font-weight:600}
+.c-link-val{font-size:.7rem;color:var(--muted);font-family:var(--fm)}
+.c-form{display:flex;flex-direction:column;gap:.9rem}
+.f-grp{display:flex;flex-direction:column;gap:5px}
+.f-grp label{font-size:.73rem;font-weight:500;color:var(--muted);font-family:var(--fm)}
+.f-grp input,.f-grp textarea{background:var(--surface2);border:1.5px solid var(--border);border-radius:7px;padding:11px 14px;color:var(--text);font-family:var(--fb);font-size:.88rem;transition:border-color .2s;outline:none;resize:vertical}
+.f-grp input:focus,.f-grp textarea:focus{border-color:var(--cyan);box-shadow:0 0 0 3px rgba(0,212,255,.05)}
+.f-grp input::placeholder,.f-grp textarea::placeholder{color:rgba(136,146,164,.35)}
+.f-row{display:grid;grid-template-columns:1fr 1fr;gap:.9rem}
+.f-err{font-size:.68rem;color:#FF4444;display:none}
+.f-ok{padding:11px 14px;border-radius:7px;background:rgba(0,255,148,.07);border:1px solid rgba(0,255,148,.18);color:var(--green);font-size:.83rem;display:none}
+
+/* FOOTER */
+footer{background:var(--bg);border-top:1px solid var(--border);padding:2.25rem 5vw;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem}
+
+/* REGION-SPECIFIC STYLES */
+@media screen {
+  body { --region: "global"; }
+}
+
+.f-copy{font-size:.76rem;color:var(--muted)}
+.f-copy span{color:var(--cyan)}
+.f-lks{display:flex;gap:1.5rem}
+.f-lks a{font-size:.76rem;color:var(--muted);text-decoration:none;transition:color .2s}
+.f-lks a:hover{color:var(--cyan)}
+
+/* BTT */
+#btt{position:fixed;bottom:2rem;right:2rem;width:42px;height:42px;background:var(--surface);border:1.5px solid var(--border);border-radius:9px;display:flex;align-items:center;justify-content:center;cursor:pointer;opacity:0;pointer-events:none;transition:all .3s;z-index:500;color:var(--muted)}
+#btt.vis{opacity:1;pointer-events:auto}
+#btt:hover{border-color:var(--cyan);color:var(--cyan);background:var(--cyan-dim)}
+
+/* REVEAL */
+.reveal{opacity:0;transform:translateY(28px);transition:all .7s cubic-bezier(.16,1,.3,1)}
+.reveal.visible{opacity:1;transform:translateY(0)}
+
+/* RESPONSIVE */
+@media(max-width:1024px){
+  .hero-inner{grid-template-columns:1fr}
+  .hero-visual{display:none}
+  .about-grid{grid-template-columns:1fr}
+  .sc-grid{grid-template-columns:repeat(2,1fr)}
+  .dash-body{grid-template-columns:1fr 1fr;grid-template-rows:auto}
+  .chart-main{grid-column:span 2}
+  .chart-side{grid-column:span 2}
+  .exp-grid{grid-template-columns:1fr}
+  .contact-grid{grid-template-columns:1fr}
+}
+@media(max-width:768px){
+  .nav-links{display:none}
+  .hamburger{display:flex}
+  .sc-grid{grid-template-columns:1fr}
+  .proj-grid{grid-template-columns:1fr}
+  .analytics-grid{grid-template-columns:1fr}
+  .hero-stats{flex-wrap:wrap;gap:1.5rem}
+  .about-meta{grid-template-columns:1fr}
+  .f-row{grid-template-columns:1fr}
+  footer{flex-direction:column;text-align:center}
+  body{cursor:auto}
+  #cur,#curR{display:none}
+  .metrics{grid-template-columns:repeat(2,1fr)}
+}
+</style>
+</head>
+<!-- SEO META TAGS FOR UK, US & CANADA -->
+<!-- Primary Meta Tags -->
+<meta name="description" content="Ezeani D. Osita - Professional Data Analyst with expertise in analytics, data visualization, and business intelligence. Available for roles in UK, US, and Canada.">
+<meta name="keywords" content="data analyst, data science, business intelligence, analytics, SQL, Python, Tableau, Power BI, UK data analyst, US data analyst, Canada data analyst">
+<meta name="author" content="Ezeani D. Osita">
+<meta name="robots" content="index, follow">
+<meta name="language" content="English">
+
+<!-- Open Graph Meta Tags -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="Ezeani D. Osita — Data Analyst | UK • US • Canada">
+<meta property="og:description" content="Professional Data Analyst specializing in business intelligence and data visualization. Open to opportunities in UK, US, and Canada.">
+<meta property="og:image" content="profile.jpeg">
+<meta property="og:url" content="">
+<meta property="og:site_name" content="Ezeani D. Osita Portfolio">
+
+<!-- Twitter Card Meta Tags -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Ezeani D. Osita — Data Analyst | UK • US • Canada">
+<meta name="twitter:description" content="Professional Data Analyst specializing in business intelligence and data visualization. Open to opportunities in UK, US, and Canada.">
+<meta name="twitter:image" content="profile.jpeg">
+
+<!-- Localization & Geographic Tags -->
+<link rel="canonical" href="">
+<link rel="alternate" hreflang="en-GB" href="">
+<link rel="alternate" hreflang="en-US" href="">
+<link rel="alternate" hreflang="en-CA" href="">
+<link rel="alternate" hreflang="en" href="">
+
+<!-- Geographic Meta Tags -->
+<meta name="geo.region" content="GB, US, CA">
+<meta name="geo.placename" content="United Kingdom, United States, Canada">
+
+<!-- Additional SEO Meta Tags -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90' fill='%2300D4FF'>E</text></svg>">
+
+<!-- Structured Data (JSON-LD) -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Person",
+  "name": "Ezeani D. Osita",
+  "jobTitle": "Data Analyst",
+  "image": "profile.jpeg",
+  "description": "Professional Data Analyst specializing in business intelligence, data visualization, and analytics. Available in UK, US, and Canada.",
+  "url": "",
+  "sameAs": ["https://www.linkedin.com", "https://github.com", "https://twitter.com"],
+  "knowsAbout": ["Data Analysis", "Business Intelligence", "Data Visualization", "SQL", "Python", "Tableau", "Power BI", "Statistics", "Analytics"],
+  "workLocation": [
+    {
+      "@type": "City",
+      "name": "United Kingdom"
+    },
+    {
+      "@type": "City",
+      "name": "United States"
+    },
+    {
+      "@type": "City",
+      "name": "Canada"
+    }
+  ]
+}
+</script>
+
+</head>
+<body>
+
+<div id="loader">
+  <div class="l-logo">EO.</div>
+  <div class="l-bar-wrap"><div class="l-bar"></div></div>
+</div>
+
+<div id="cur"></div>
+<div id="curR"></div>
+
+<button id="btt" onclick="window.scrollTo({top:0,behavior:'smooth'})">
+  <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 11V3M3 7l4-4 4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+</button>
+
+<nav id="navbar">
+  <a href="#hero" class="nav-logo">
+    <span class="nav-logo-dot"></span>
+    Ezeani <span>Osita</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#skills">Skills</a></li>
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#experience">Experience</a></li>
+    <li><a href="#contact" class="nav-cta">Hire Me</a></li>
+  </ul>
+  <div class="hamburger" id="hbg" onclick="toggleMenu()">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+<div class="mob-menu" id="mobMenu">
+  <ul>
+    <li><a href="#about" onclick="toggleMenu()">About</a></li>
+    <li><a href="#skills" onclick="toggleMenu()">Skills</a></li>
+    <li><a href="#projects" onclick="toggleMenu()">Projects</a></li>
+    <li><a href="#experience" onclick="toggleMenu()">Experience</a></li>
+    <li><a href="#contact" onclick="toggleMenu()">Hire Me</a></li>
+  </ul>
+</div>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+  <div class="hero-inner">
+    <div class="hero-left">
+      <div class="hero-eyebrow">Data Analyst &nbsp;·&nbsp; Lagos, Nigeria</div>
+      <h1 class="hero-h1">Turning Raw Data Into<br><span class="hl">Actionable Insights</span></h1>
+      <div class="hero-terminal">$ analyst.run(<span class="typed" id="typedText"></span><span class="tcur"></span>)</div>
+      <p class="hero-desc">Data Analyst with expertise in Power BI, SQL, and Excel — transforming complex datasets into clear business intelligence across retail, logistics, energy, and education sectors.</p>
+      <div class="hero-btns">
+        <a href="#projects" class="btn-p">View Projects</a>
+        <a href="EZEANI_OSITA_Data_Analyst_CV.pdf" download class="btn-o">Download CV</a>
+      </div>
+      <div class="hero-stats">
+        <div>
+          <div class="stat-n"><span id="s1">0</span>+</div>
+          <div class="stat-l">Projects Completed</div>
+        </div>
+        <div>
+          <div class="stat-n"><span id="s2">0</span>+</div>
+          <div class="stat-l">Certifications</div>
+        </div>
+        <div>
+          <div class="stat-n"><span id="s3">0</span>K</div>
+          <div class="stat-l">IG Followers</div>
+        </div>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div class="profile-card">
+        <div class="profile-img-wrap">
+          <img src="profile.jpeg" alt="Ezeani D. Osita" onerror="this.style.background='linear-gradient(135deg,#00D4FF22,#7B2FFF22)'">
+        </div>
+        <div class="profile-name">Ezeani D. Osita</div>
+        <div class="profile-role">data_analyst.init()</div>
+        <div class="profile-badges">
+          <span class="badge bc">Power BI</span>
+          <span class="badge bv">SQL</span>
+          <span class="badge bg">Excel</span>
+          <span class="badge bc">BI Reporting</span>
+          <span class="badge bv">Data Viz</span>
+        </div>
+        <div class="avail">
+          <div class="avail-dot"></div>
+          Available for opportunities
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="s-inner">
+    <div class="about-grid">
+      <div class="about-text reveal">
+        <span class="s-tag">// about.me</span>
+        <h2 class="s-title">The Analyst Behind the Data</h2>
+        <p>I'm <strong>Ezeani D. Osita</strong>, a Data Analyst and Business Intelligence Developer based in Lagos, Nigeria. I specialize in transforming messy, raw datasets into clean, compelling dashboards and reports that drive real decisions.</p>
+        <p>My background spans <strong>retail operations, energy sector inspections, and education</strong> — giving me a multi-sector lens for data problems. I've honed my craft through industry bootcamps (UTIVA Academy), NCDMB/HAAC Energy BI certifications, and virtual hackathons.</p>
+        <p>Whether it's building a CEO's monthly report in Power BI or analyzing customer segments for a CMO, I bring the same rigor: clean data, precise models, and stories that stakeholders actually understand.</p>
+        <div class="about-meta">
+          <div class="am-item">
+            <div class="am-icon">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><rect x="2" y="3" width="12" height="10" rx="1.5" stroke="var(--cyan)" stroke-width="1.4"/><path d="M5 3V2M11 3V2M2 6h12" stroke="var(--cyan)" stroke-width="1.4" stroke-linecap="round"/></svg>
+            </div>
+            <div><div class="am-title">B.Ed. Economics</div><div class="am-desc">University of Port Harcourt, 2021</div></div>
+          </div>
+          <div class="am-item">
+            <div class="am-icon">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 1.5C5.51 1.5 3.5 3.51 3.5 6c0 3.75 4.5 8.5 4.5 8.5s4.5-4.75 4.5-8.5c0-2.49-2.01-4.5-4.5-4.5z" stroke="var(--cyan)" stroke-width="1.4"/><circle cx="8" cy="6" r="1.5" stroke="var(--cyan)" stroke-width="1.3"/></svg>
+            </div>
+            <div><div class="am-title">Lagos, Nigeria</div><div class="am-desc">Open to remote &amp; hybrid roles</div></div>
+          </div>
+          <div class="am-item">
+            <div class="am-icon">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6" stroke="var(--cyan)" stroke-width="1.4"/><path d="M8 4v4l2.5 2.5" stroke="var(--cyan)" stroke-width="1.4" stroke-linecap="round"/></svg>
+            </div>
+            <div><div class="am-title">Lions Club</div><div class="am-desc">Leo Club · President Award recipient</div></div>
+          </div>
+          <div class="am-item">
+            <div class="am-icon">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6" stroke="var(--cyan)" stroke-width="1.4"/><path d="M8 2c0 0-3 2-3 6s3 6 3 6M8 2c0 0 3 2 3 6s-3 6-3 6M2 8h12" stroke="var(--cyan)" stroke-width="1.3"/></svg>
+            </div>
+            <div><div class="am-title">Languages</div><div class="am-desc">English · Igbo · Yoruba</div></div>
+          </div>
+        </div>
+      </div>
+      <div class="reveal" style="transition-delay:.15s">
+        <span class="s-tag">// skill_levels</span>
+        <div class="skills-col" id="skillsGrid">
+          <div class="skill-row"><div class="skill-meta"><span class="skill-name">Power BI</span><span class="skill-pct">90%</span></div><div class="skill-track"><div class="skill-fill" data-width="90"></div></div></div>
+          <div class="skill-row"><div class="skill-meta"><span class="skill-name">Microsoft Excel</span><span class="skill-pct">92%</span></div><div class="skill-track"><div class="skill-fill" data-width="92"></div></div></div>
+          <div class="skill-row"><div class="skill-meta"><span class="skill-name">SQL</span><span class="skill-pct">80%</span></div><div class="skill-track"><div class="skill-fill" data-width="80"></div></div></div>
+          <div class="skill-row"><div class="skill-meta"><span class="skill-name">Data Visualization</span><span class="skill-pct">88%</span></div><div class="skill-track"><div class="skill-fill" data-width="88"></div></div></div>
+          <div class="skill-row"><div class="skill-meta"><span class="skill-name">BI Dashboard Development</span><span class="skill-pct">85%</span></div><div class="skill-track"><div class="skill-fill" data-width="85"></div></div></div>
+          <div class="skill-row"><div class="skill-meta"><span class="skill-name">Data Storytelling</span><span class="skill-pct">87%</span></div><div class="skill-track"><div class="skill-fill" data-width="87"></div></div></div>
+          <div class="skill-row"><div class="skill-meta"><span class="skill-name">Exploratory Data Analysis</span><span class="skill-pct">82%</span></div><div class="skill-track"><div class="skill-fill" data-width="82"></div></div></div>
+          <div class="skill-row"><div class="skill-meta"><span class="skill-name">KPI Tracking &amp; Reporting</span><span class="skill-pct">89%</span></div><div class="skill-track"><div class="skill-fill" data-width="89"></div></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SKILLS -->
+<section id="skills">
+  <div class="s-inner">
+    <div class="s-head reveal">
+      <span class="s-tag">// capabilities</span>
+      <h2 class="s-title">What I Bring to the Table</h2>
+      <p class="s-sub">Six core disciplines covering the full analytics lifecycle — from raw data wrangling to boardroom-ready insights.</p>
+    </div>
+    <div class="sc-grid">
+      <div class="sc-card reveal">
+        <div class="sc-icon-wrap ic-cyan">
+          <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><path d="M3 6h16M3 11h10M3 16h7" stroke="var(--cyan)" stroke-width="1.6" stroke-linecap="round"/><circle cx="17" cy="14" r="4" stroke="var(--cyan)" stroke-width="1.5"/><path d="M20 17l2 2" stroke="var(--cyan)" stroke-width="1.5" stroke-linecap="round"/></svg>
+        </div>
+        <div class="sc-title">Data Cleaning &amp; Transformation</div>
+        <div class="sc-desc">Turning inconsistent, incomplete datasets into reliable analytical foundations using Excel Power Query, SQL, and structured ETL patterns.</div>
+        <div class="sc-tags"><span class="sc-tag">Power Query</span><span class="sc-tag">SQL</span><span class="sc-tag">ETL</span></div>
+      </div>
+      <div class="sc-card reveal" style="transition-delay:.08s">
+        <div class="sc-icon-wrap ic-violet">
+          <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><circle cx="11" cy="11" r="8.5" stroke="#A855F7" stroke-width="1.5"/><path d="M11 7v4l3 3" stroke="#A855F7" stroke-width="1.6" stroke-linecap="round"/><path d="M6.5 6.5l1.5 1.5M15.5 6.5l-1.5 1.5" stroke="#A855F7" stroke-width="1.4" stroke-linecap="round"/></svg>
+        </div>
+        <div class="sc-title">Exploratory Data Analysis</div>
+        <div class="sc-desc">Systematic investigation of datasets to discover patterns, anomalies, and relationships that drive deeper business understanding.</div>
+        <div class="sc-tags"><span class="sc-tag">EDA</span><span class="sc-tag">Statistics</span><span class="sc-tag">Excel</span></div>
+      </div>
+      <div class="sc-card reveal" style="transition-delay:.16s">
+        <div class="sc-icon-wrap ic-cyan">
+          <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><rect x="2" y="3" width="18" height="16" rx="2" stroke="var(--cyan)" stroke-width="1.5"/><path d="M6 15l3-4 3 3 2-3 3 4" stroke="var(--cyan)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M2 7h18" stroke="var(--cyan)" stroke-width="1.4"/></svg>
+        </div>
+        <div class="sc-title">Business Intelligence &amp; Reporting</div>
+        <div class="sc-desc">Building interactive Power BI dashboards and structured BI reports that give executives real-time visibility into performance.</div>
+        <div class="sc-tags"><span class="sc-tag">Power BI</span><span class="sc-tag">DAX</span><span class="sc-tag">KPIs</span></div>
+      </div>
+      <div class="sc-card reveal" style="transition-delay:.06s">
+        <div class="sc-icon-wrap ic-green">
+          <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><rect x="2" y="12" width="4" height="8" rx="1" stroke="var(--green)" stroke-width="1.5"/><rect x="9" y="8" width="4" height="12" rx="1" stroke="var(--green)" stroke-width="1.5"/><rect x="16" y="4" width="4" height="16" rx="1" stroke="var(--green)" stroke-width="1.5"/></svg>
+        </div>
+        <div class="sc-title">Dashboard Development</div>
+        <div class="sc-desc">Designing polished, role-specific dashboards — from CEO revenue summaries to CMO customer insights — that communicate clearly and fast.</div>
+        <div class="sc-tags"><span class="sc-tag">Power BI</span><span class="sc-tag">Visuals</span><span class="sc-tag">UX</span></div>
+      </div>
+      <div class="sc-card reveal" style="transition-delay:.12s">
+        <div class="sc-icon-wrap ic-orange">
+          <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><circle cx="11" cy="11" r="8.5" stroke="var(--orange)" stroke-width="1.5"/><path d="M11 6v5l3.5 2" stroke="var(--orange)" stroke-width="1.6" stroke-linecap="round"/></svg>
+        </div>
+        <div class="sc-title">KPI Tracking &amp; Performance</div>
+        <div class="sc-desc">Defining, measuring, and monitoring the metrics that matter — revenue trends, churn signals, inventory flow, and operational efficiency.</div>
+        <div class="sc-tags"><span class="sc-tag">Metrics</span><span class="sc-tag">Trend Analysis</span><span class="sc-tag">Benchmarks</span></div>
+      </div>
+      <div class="sc-card reveal" style="transition-delay:.18s">
+        <div class="sc-icon-wrap ic-violet">
+          <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><path d="M4 16s1.5-6 7-6 7 6 7 6" stroke="#A855F7" stroke-width="1.5" stroke-linecap="round"/><circle cx="11" cy="7" r="3" stroke="#A855F7" stroke-width="1.5"/></svg>
+        </div>
+        <div class="sc-title">Data Storytelling</div>
+        <div class="sc-desc">Translating numbers into narratives that non-technical stakeholders understand, trust, and act on. The final mile of every analysis.</div>
+        <div class="sc-tags"><span class="sc-tag">Presentation</span><span class="sc-tag">Insights</span><span class="sc-tag">Strategy</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROJECTS -->
+<section id="projects">
+  <div class="s-inner">
+    <div class="s-head reveal">
+      <span class="s-tag">// projects</span>
+      <h2 class="s-title">Real Work. Real Impact.</h2>
+      <p class="s-sub">Analytics projects spanning online retail, financial data, marketing performance, and business intelligence reporting.</p>
+    </div>
+    <div class="proj-filter reveal">
+      <button class="f-btn active" data-filter="all">All Projects</button>
+      <button class="f-btn" data-filter="powerbi">Power BI</button>
+      <button class="f-btn" data-filter="excel">Excel</button>
+      <button class="f-btn" data-filter="sql">SQL</button>
+    </div>
+    <div class="proj-grid" id="projGrid">
+      <div class="proj-card reveal" data-tags="powerbi">
+        <div class="proj-thumb">
+          <svg viewBox="0 0 400 170" preserveAspectRatio="xMidYMid slice"><defs><linearGradient id="g1" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#00D4FF" stop-opacity=".14"/><stop offset="100%" stop-color="#7B2FFF" stop-opacity=".07"/></linearGradient></defs><rect width="400" height="170" fill="url(#g1)"/><polyline points="20,145 60,125 100,85 140,95 180,58 220,66 260,38 300,52 340,28 380,43" fill="none" stroke="#00D4FF" stroke-width="1.8" opacity=".55"/><circle cx="340" cy="28" r="4" fill="#00D4FF" opacity=".75"/><rect x="20" y="148" width="28" height="18" rx="2" fill="#00D4FF" opacity=".18"/><rect x="58" y="134" width="28" height="32" rx="2" fill="#00D4FF" opacity=".22"/><rect x="96" y="96" width="28" height="70" rx="2" fill="#7B2FFF" opacity=".22"/></svg>
+          <div class="proj-thumb-lbl">CEO REVENUE REPORT</div>
+        </div>
+        <div class="proj-body">
+          <div class="proj-cat">Power BI · Business Intelligence</div>
+          <div class="proj-title">CEO's Monthly Revenue Report — Online Retail</div>
+          <div class="proj-problem">Leadership needed a high-level view of monthly revenue trends and quarterly breakdowns to guide strategic decisions.</div>
+          <div class="proj-impact">Total 2011 revenue tracked at 9.75M with month-by-month trend line</div>
+          <div class="proj-tools"><span class="proj-tool">Power BI</span><span class="proj-tool">DAX</span><span class="proj-tool">Matrix Visuals</span><span class="proj-tool">Line Chart</span></div>
+          <div class="proj-actions"><a href="#" class="p-btn p-btn-1">View Dashboard</a><a href="#" class="p-btn p-btn-2">Case Study</a></div>
+        </div>
+      </div>
+      <div class="proj-card reveal" style="transition-delay:.1s" data-tags="powerbi">
+        <div class="proj-thumb">
+          <svg viewBox="0 0 400 170" preserveAspectRatio="xMidYMid slice"><defs><linearGradient id="g2" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#7B2FFF" stop-opacity=".16"/><stop offset="100%" stop-color="#00D4FF" stop-opacity=".05"/></linearGradient></defs><rect width="400" height="170" fill="url(#g2)"/><rect x="28" y="36" width="26" height="116" rx="3" fill="none" stroke="#7B2FFF" stroke-width="1.5" opacity=".75"/><rect x="66" y="66" width="26" height="86" rx="3" fill="none" stroke="#FF6B6B" stroke-width="1.5" opacity=".7"/><rect x="104" y="50" width="26" height="102" rx="3" fill="none" stroke="#7B2FFF" stroke-width="1.5" opacity=".65"/><rect x="142" y="88" width="26" height="64" rx="3" fill="none" stroke="#FFD700" stroke-width="1.5" opacity=".65"/><rect x="180" y="98" width="26" height="54" rx="3" fill="none" stroke="#4ECDC4" stroke-width="1.5" opacity=".65"/></svg>
+          <div class="proj-thumb-lbl">CMO INSIGHTS</div>
+        </div>
+        <div class="proj-body">
+          <div class="proj-cat">Power BI · Customer Analytics</div>
+          <div class="proj-title">CMO's Insights — Top 10 Customers by Revenue</div>
+          <div class="proj-problem">Marketing leadership needed to identify high-value customer segments to focus retention and upsell efforts.</div>
+          <div class="proj-impact">Top customer (ID 14646) contributing 250K+ in revenue identified</div>
+          <div class="proj-tools"><span class="proj-tool">Power BI</span><span class="proj-tool">Bar Charts</span><span class="proj-tool">Filters</span><span class="proj-tool">CustomerID Analysis</span></div>
+          <div class="proj-actions"><a href="#" class="p-btn p-btn-1">View Dashboard</a><a href="#" class="p-btn p-btn-2">Case Study</a></div>
+        </div>
+      </div>
+      <div class="proj-card reveal" data-tags="powerbi excel">
+        <div class="proj-thumb">
+          <svg viewBox="0 0 400 170" preserveAspectRatio="xMidYMid slice"><defs><linearGradient id="g3" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#00FF94" stop-opacity=".11"/><stop offset="100%" stop-color="#00D4FF" stop-opacity=".07"/></linearGradient></defs><rect width="400" height="170" fill="url(#g3)"/><rect x="80" y="28" width="155" height="7" rx="2" fill="#00FF94" opacity=".45"/><rect x="80" y="66" width="124" height="5" rx="2" fill="#00D4FF" opacity=".38"/><rect x="80" y="96" width="95" height="5" rx="2" fill="#7B2FFF" opacity=".45"/><rect x="80" y="124" width="75" height="5" rx="2" fill="#00D4FF" opacity=".32"/><text x="248" y="36" fill="#00FF94" font-size="11" opacity=".6" font-family="monospace">285K</text><text x="215" y="72" fill="#00D4FF" font-size="11" opacity=".6" font-family="monospace">263K</text><text x="186" y="102" fill="#A855F7" font-size="11" opacity=".6" font-family="monospace">222K</text><text x="165" y="130" fill="#00D4FF" font-size="11" opacity=".6" font-family="monospace">197K</text></svg>
+          <div class="proj-thumb-lbl">GEO REVENUE</div>
+        </div>
+        <div class="proj-body">
+          <div class="proj-cat">Power BI · Geographic Analysis</div>
+          <div class="proj-title">Top 10 Countries by Revenue (Excl. UK)</div>
+          <div class="proj-problem">Business needed to understand international revenue distribution to allocate sales resources and identify expansion opportunities.</div>
+          <div class="proj-impact">Netherlands ranked #1 at 285K revenue; 10 markets benchmarked side-by-side</div>
+          <div class="proj-tools"><span class="proj-tool">Power BI</span><span class="proj-tool">Clustered Bar</span><span class="proj-tool">Country Filter</span><span class="proj-tool">Dual Metrics</span></div>
+          <div class="proj-actions"><a href="#" class="p-btn p-btn-1">View Dashboard</a><a href="#" class="p-btn p-btn-2">Case Study</a></div>
+        </div>
+      </div>
+      <div class="proj-card reveal" style="transition-delay:.1s" data-tags="powerbi excel">
+        <div class="proj-thumb">
+          <svg viewBox="0 0 400 170" preserveAspectRatio="xMidYMid slice"><defs><linearGradient id="g4" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#FF6B35" stop-opacity=".13"/><stop offset="100%" stop-color="#7B2FFF" stop-opacity=".07"/></linearGradient></defs><rect width="400" height="170" fill="url(#g4)"/><circle cx="200" cy="85" r="58" fill="none" stroke="#FF6B35" stroke-width="1.8" stroke-dasharray="182 182" stroke-dashoffset="42" opacity=".55"/><circle cx="200" cy="85" r="58" fill="none" stroke="#7B2FFF" stroke-width="1.8" stroke-dasharray="76 182" stroke-dashoffset="140" opacity=".5"/><circle cx="200" cy="85" r="58" fill="none" stroke="#00D4FF" stroke-width="1.8" stroke-dasharray="46 182" stroke-dashoffset="216" opacity=".5"/><text x="200" y="90" fill="rgba(255,255,255,.45)" font-size="11" text-anchor="middle" font-family="monospace">127.93M</text></svg>
+          <div class="proj-thumb-lbl">FINANCIAL ANALYSIS</div>
+        </div>
+        <div class="proj-body">
+          <div class="proj-cat">Power BI · Financial Analytics</div>
+          <div class="proj-title">Financial Sales Dashboard — Multi-Country Analysis</div>
+          <div class="proj-problem">Finance team needed a consolidated view of 127.93M in total sales across products, countries, and discount bands for 2013–2014.</div>
+          <div class="proj-impact">Paseo identified as top product at 36M; High discount band drives 35.36% of unit volume</div>
+          <div class="proj-tools"><span class="proj-tool">Power BI</span><span class="proj-tool">Pie Chart</span><span class="proj-tool">Matrix</span><span class="proj-tool">Q&amp;A Visual</span></div>
+          <div class="proj-actions"><a href="#" class="p-btn p-btn-1">View Dashboard</a><a href="#" class="p-btn p-btn-2">Case Study</a></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DASHBOARD PREVIEW -->
+<section id="dashboard">
+  <div class="s-inner">
+    <div class="s-head reveal">
+      <span class="s-tag">// live_preview</span>
+      <h2 class="s-title">Analytics Dashboard Demo</h2>
+      <p class="s-sub">A simulated BI overview — the kind of real-time performance view I build for stakeholders.</p>
+    </div>
+    <div class="dash-wrap reveal">
+      <div class="dash-bar">
+        <div class="dash-dot" style="background:#FF5F57"></div>
+        <div class="dash-dot" style="background:#FFBD2E"></div>
+        <div class="dash-dot" style="background:#28C840"></div>
+        <span class="dash-bar-title">business_intelligence_dashboard.pbix — Ezeani Osita Analytics</span>
+      </div>
+      <div class="dash-body">
+        <div class="kpi"><div class="kpi-lbl">TOTAL REVENUE</div><div class="kpi-val" style="color:var(--cyan)" id="kpiRev">—</div><div class="kpi-ch up">+18.4% vs last period</div></div>
+        <div class="kpi"><div class="kpi-lbl">ACTIVE CUSTOMERS</div><div class="kpi-val" style="color:#A855F7" id="kpiCust">—</div><div class="kpi-ch up">+12.6% vs last period</div></div>
+        <div class="kpi"><div class="kpi-lbl">AVG ORDER VALUE</div><div class="kpi-val" style="color:var(--green)" id="kpiAov">—</div><div class="kpi-ch dn">-2.1% vs last period</div></div>
+        <div class="kpi"><div class="kpi-lbl">UNITS SOLD</div><div class="kpi-val" style="color:var(--orange)" id="kpiUnits">—</div><div class="kpi-ch up">+9.3% vs last period</div></div>
+        <div class="kpi"><div class="kpi-lbl">DATA ACCURACY</div><div class="kpi-val" style="color:var(--cyan)">98%</div><div class="kpi-ch up">Cleaned &amp; validated</div></div>
+        <div class="chart-main"><div class="chart-hd"><span class="chart-hd-t">Monthly Revenue Trend</span><span class="chart-hd-p">Jan – Dec 2024</span></div><canvas id="revChart" height="180"></canvas></div>
+        <div class="chart-side"><div class="chart-hd"><span class="chart-hd-t">Revenue by Market</span><span class="chart-hd-p">Q4 2024</span></div><canvas id="segChart" height="180"></canvas></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EXPERIENCE -->
+<section id="experience">
+  <div class="s-inner">
+    <div class="s-head reveal">
+      <span class="s-tag">// experience &amp; credentials</span>
+      <h2 class="s-title">Career Journey</h2>
+    </div>
+    <div class="exp-grid">
+      <div>
+        <div class="exp-col-title">Work History</div>
+        <div class="timeline">
+          <div class="tl-item reveal">
+            <div class="tl-dot"></div>
+            <div class="tl-date">Jul 2023 – Oct 2024</div>
+            <div class="tl-role">Sales Associate (NYSC)</div>
+            <div class="tl-org">Prince Ebeano Supermarket · Lekki, Lagos</div>
+            <ul class="tl-pts">
+              <li>Maintained inventory records and analyzed stock movement trends using Excel</li>
+              <li>Generated periodic stock reports supporting replenishment planning decisions</li>
+              <li>Applied EDA techniques to identify seasonal demand patterns</li>
+            </ul>
+          </div>
+          <div class="tl-item reveal" style="transition-delay:.1s">
+            <div class="tl-dot"></div>
+            <div class="tl-date">Feb 2023 – Jun 2023</div>
+            <div class="tl-role">Facility Pipeline Inspection Officer</div>
+            <div class="tl-org">Shell R.A · Port Harcourt</div>
+            <ul class="tl-pts">
+              <li>Collected, analyzed, and reported inspection data for compliance decisions</li>
+              <li>Built structured data logs used in maintenance planning and risk reporting</li>
+            </ul>
+          </div>
+          <div class="tl-item reveal" style="transition-delay:.15s">
+            <div class="tl-dot"></div>
+            <div class="tl-date">Aug 2019 – Dec 2019</div>
+            <div class="tl-role">Teaching Assistant</div>
+            <div class="tl-org">UNIPORT Demonstration Secondary School</div>
+            <ul class="tl-pts">
+              <li>Maintained academic records and monitored student performance data</li>
+              <li>Applied data tracking to identify at-risk students for early intervention</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="exp-col-title">Certifications</div>
+        <div class="certs">
+          <div class="cert reveal">
+            <div class="cert-icon-wrap">
+              <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="8" r="5.5" stroke="var(--cyan)" stroke-width="1.4"/><path d="M5.5 13.5L4 17l5-2 5 2-1.5-3.5" stroke="var(--cyan)" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+            <div><div class="cert-title">Data Analytics &amp; BI Certification</div><div class="cert-org">NCDMB / HAAC Energy Ltd · 2026</div></div>
+          </div>
+          <div class="cert reveal" style="transition-delay:.07s">
+            <div class="cert-icon-wrap">
+              <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><rect x="2" y="12" width="3" height="5" rx="1" stroke="var(--cyan)" stroke-width="1.4"/><rect x="7.5" y="8" width="3" height="9" rx="1" stroke="var(--cyan)" stroke-width="1.4"/><rect x="13" y="4" width="3" height="13" rx="1" stroke="var(--cyan)" stroke-width="1.4"/></svg>
+            </div>
+            <div><div class="cert-title">Data Analytics Bootcamp</div><div class="cert-org">UTIVA Academy · 2025</div></div>
+          </div>
+          <div class="cert reveal" style="transition-delay:.12s">
+            <div class="cert-icon-wrap">
+              <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><rect x="2" y="3" width="14" height="12" rx="1.5" stroke="var(--cyan)" stroke-width="1.4"/><path d="M5 11l2.5-3.5 2.5 2.5 1.5-2 2 3" stroke="var(--cyan)" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+            <div><div class="cert-title">Data Visualization Certificate</div><div class="cert-org">Tata Group / Forage · 2025</div></div>
+          </div>
+          <div class="cert reveal" style="transition-delay:.16s">
+            <div class="cert-icon-wrap">
+              <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="9" r="6.5" stroke="var(--cyan)" stroke-width="1.4"/><path d="M9 2.5c0 0-4 2-4 6.5s4 6.5 4 6.5M9 2.5c0 0 4 2 4 6.5s-4 6.5-4 6.5M2.5 9h13" stroke="var(--cyan)" stroke-width="1.3"/></svg>
+            </div>
+            <div><div class="cert-title">Google Digital Marketing Certificate</div><div class="cert-org">Google · 2022</div></div>
+          </div>
+          <div class="cert reveal" style="transition-delay:.2s">
+            <div class="cert-icon-wrap">
+              <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M3 5h12M3 9h8M3 13h5" stroke="var(--cyan)" stroke-width="1.4" stroke-linecap="round"/></svg>
+            </div>
+            <div><div class="cert-title">EF SET English Certificate</div><div class="cert-org">EF Education · Upper Intermediate · 2025</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ANALYTICS -->
+<section id="analytics">
+  <div class="s-inner">
+    <div class="s-head reveal">
+      <span class="s-tag">// social_analytics</span>
+      <h2 class="s-title">My Own Analytics in Action</h2>
+      <p class="s-sub">Real Meta Business Suite data from April–May 2026 — I track my personal brand the same way I'd track any business KPI.</p>
+    </div>
+    <div class="analytics-grid">
+      <div class="plat-card reveal">
+        <div class="plat-hd">
+          <div class="plat-icon" style="background:rgba(24,119,242,.12)">
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M10.5 3H8C6.34 3 5 4.34 5 6v.5H3.5v2H5V15h2.5V8.5h2l.5-2H7.5V6c0-.28.22-.5.5-.5h2V3z" fill="#1877F2"/></svg>
+          </div>
+          <div><div class="plat-name">Facebook</div><div class="plat-period">28 Apr – 25 May 2026</div></div>
+        </div>
+        <div class="metrics">
+          <div class="m-box"><div class="m-lbl">TOTAL VIEWS</div><div class="m-val">42.6K</div><div class="m-ch">+18.6K%</div></div>
+          <div class="m-box"><div class="m-lbl">UNIQUE VIEWERS</div><div class="m-val">24.1K</div><div class="m-ch">+15.6K%</div></div>
+          <div class="m-box"><div class="m-lbl">INTERACTIONS</div><div class="m-val">249</div><div class="m-ch">+12.3K%</div></div>
+          <div class="m-box"><div class="m-lbl">LINK CLICKS</div><div class="m-val">866</div><div class="m-ch">+100%</div></div>
+          <div class="m-box"><div class="m-lbl">PAGE VISITS</div><div class="m-val">499</div><div class="m-ch">+384.5%</div></div>
+          <div class="m-box"><div class="m-lbl">NET FOLLOWS</div><div class="m-val" style="color:#FF4444">−37</div><div class="m-ch" style="color:var(--muted)">59 new · 96 lost</div></div>
+        </div>
+      </div>
+      <div class="plat-card reveal" style="transition-delay:.1s">
+        <div class="plat-hd">
+          <div class="plat-icon" style="background:rgba(225,48,108,.1)">
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><rect x="2" y="2" width="14" height="14" rx="4" stroke="#E1306C" stroke-width="1.5"/><circle cx="9" cy="9" r="3.5" stroke="#E1306C" stroke-width="1.4"/><circle cx="13" cy="5" r="1" fill="#E1306C"/></svg>
+          </div>
+          <div><div class="plat-name">Instagram</div><div class="plat-period">28 Apr – 25 May 2026</div></div>
+        </div>
+        <div class="metrics">
+          <div class="m-box"><div class="m-lbl">IG VIEWS</div><div class="m-val">2.3K</div><div class="m-ch">+141.8%</div></div>
+          <div class="m-box"><div class="m-lbl">REACH</div><div class="m-val">1.1K</div><div class="m-ch">+189.1%</div></div>
+          <div class="m-box"><div class="m-lbl">INTERACTIONS</div><div class="m-val">12</div><div class="m-ch" style="color:var(--muted)">0% change</div></div>
+          <div class="m-box"><div class="m-lbl">PROFILE VISITS</div><div class="m-val">165</div><div class="m-ch">+21.3%</div></div>
+          <div class="m-box"><div class="m-lbl">NEW FOLLOWS</div><div class="m-val">25</div><div class="m-ch">+212.5%</div></div>
+          <div class="m-box"><div class="m-lbl">TOTAL FOLLOWERS</div><div class="m-val">15.2K</div><div class="m-ch" style="color:var(--muted)">56.9% M · 43.1% F</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="insight-bar reveal">
+      <p><span>Top audience cities:</span> &nbsp;Lagos 8.5% &nbsp;·&nbsp; Belo Horizonte, Brazil 2% &nbsp;·&nbsp; Abuja 1.8% &nbsp;·&nbsp; Port Harcourt 1.6% &nbsp;·&nbsp; Ibadan 1.5% &nbsp;·&nbsp; São Paulo 1.4% — demonstrating strong local reach alongside growing international presence.</p>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="s-inner">
+    <div class="contact-grid">
+      <div class="reveal">
+        <span class="s-tag">// contact</span>
+        <h3>Let's Work Together</h3>
+        <p>Have a dataset that needs cleaning? A dashboard that needs building? I'm open to full-time roles, freelance projects, and consulting engagements.</p>
+        <div class="c-links">
+          <a href="mailto:ezeani.austine@gmail.com" class="c-link">
+            <div class="c-link-icon">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><rect x="1.5" y="3" width="13" height="10" rx="1.5" stroke="var(--cyan)" stroke-width="1.4"/><path d="M1.5 5l6.5 4.5L14.5 5" stroke="var(--cyan)" stroke-width="1.3"/></svg>
+            </div>
+            <div><div class="c-link-title">Email</div><div class="c-link-val">ezeani.austine@gmail.com</div></div>
+          </a>
+          <a href="tel:07030695863" class="c-link">
+            <div class="c-link-icon">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 2h3l1 3-1.5 1.5c1 2 2 3 4 4L11 9l3 1v3c0 1-4 2.5-8-1.5S2 3 3 2z" stroke="var(--cyan)" stroke-width="1.3"/></svg>
+            </div>
+            <div><div class="c-link-title">Phone</div><div class="c-link-val">07030695863 / 09012527918</div></div>
+          </a>
+          <a href="https://linkedin.com/in/ezeani-osita001" target="_blank" class="c-link">
+            <div class="c-link-icon">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><rect x="1.5" y="1.5" width="13" height="13" rx="2" stroke="var(--cyan)" stroke-width="1.4"/><path d="M5 7v4M5 5.5v.01M8 11V8.5c0-1 .5-1.5 1.5-1.5S11 7.5 11 8.5V11" stroke="var(--cyan)" stroke-width="1.3" stroke-linecap="round"/></svg>
+            </div>
+            <div><div class="c-link-title">LinkedIn</div><div class="c-link-val">linkedin.com/in/ezeani-osita001</div></div>
+          </a>
+          <a href="#" class="c-link">
+            <div class="c-link-icon">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 1.5C5.51 1.5 3.5 3.51 3.5 6c0 3.75 4.5 8.5 4.5 8.5s4.5-4.75 4.5-8.5c0-2.49-2.01-4.5-4.5-4.5z" stroke="var(--cyan)" stroke-width="1.4"/><circle cx="8" cy="6" r="1.5" stroke="var(--cyan)" stroke-width="1.3"/></svg>
+            </div>
+            <div><div class="c-link-title">Location</div><div class="c-link-val">Lagos, Nigeria · Open to Remote</div></div>
+          </a>
+        </div>
+      </div>
+      <div class="reveal" style="transition-delay:.15s">
+        <div class="c-form">
+          <div class="f-row">
+            <div class="f-grp"><label>NAME</label><input type="text" id="cName" placeholder="Your full name"><span class="f-err" id="errN">Please enter your name</span></div>
+            <div class="f-grp"><label>EMAIL</label><input type="email" id="cEmail" placeholder="your@email.com"><span class="f-err" id="errE">Please enter a valid email</span></div>
+          </div>
+          <div class="f-grp"><label>SUBJECT</label><input type="text" id="cSubj" placeholder="What's this about?"></div>
+          <div class="f-grp"><label>MESSAGE</label><textarea id="cMsg" rows="5" placeholder="Tell me about your project or opportunity..."></textarea><span class="f-err" id="errM">Please enter a message</span></div>
+          <button class="btn-p" onclick="submitForm()" style="width:100%;border:none;padding:15px;font-size:.92rem;border-radius:7px;cursor:pointer">Send Message</button>
+          <div class="f-ok" id="fOk">Message sent — I'll be in touch within 24 hours.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="f-copy">© 2026 <span>Ezeani D. Osita</span> · Data Analyst · Lagos, Nigeria</div>
+  <div class="f-lks">
+    <a href="#hero">Home</a>
+    <a href="#about">About</a>
+    <a href="#projects">Projects</a>
+    <a href="mailto:ezeani.austine@gmail.com">Email</a>
+    <a href="https://linkedin.com/in/ezeani-osita001" target="_blank">LinkedIn</a>
+  </div>
+</footer>
+
+<script>
+// Loader
+window.addEventListener('load',()=>{setTimeout(()=>{const l=document.getElementById('loader');l.style.opacity='0';setTimeout(()=>l.style.display='none',600)},1600)});
+
+// Cursor
+const cur=document.getElementById('cur'),ring=document.getElementById('curR');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cur.style.left=mx-4+'px';cur.style.top=my-4+'px'});
+(function animR(){rx+=(mx-rx-17)*.18;ry+=(my-ry-17)*.18;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(animR)})();
+document.querySelectorAll('a,button,.proj-card,.sc-card').forEach(el=>{el.addEventListener('mouseenter',()=>{cur.style.transform='scale(2)';ring.style.transform='scale(1.5)';ring.style.borderColor='rgba(0,212,255,.6)'});el.addEventListener('mouseleave',()=>{cur.style.transform='scale(1)';ring.style.transform='scale(1)';ring.style.borderColor='rgba(0,212,255,.35)'})});
+
+// Mobile menu
+function toggleMenu(){document.getElementById('mobMenu').classList.toggle('open')}
+
+// BTT + nav active
+window.addEventListener('scroll',()=>{
+  document.getElementById('btt').classList.toggle('vis',window.scrollY>400);
+  const secs=document.querySelectorAll('section[id]');let cur2='';
+  secs.forEach(s=>{if(window.scrollY>=s.offsetTop-100)cur2=s.id});
+  document.querySelectorAll('.nav-links a').forEach(a=>a.classList.toggle('active',a.getAttribute('href')==='#'+cur2));
+});
+
+// Typed text
+const phrases=['"build_insight_dashboard"','"clean_raw_dataset"','"deliver_BI_report"','"track_KPI_trends"','"drive_decisions"'];
+let pi=0,ci=0,del=false;
+function type(){const el=document.getElementById('typedText');if(!el)return;const p=phrases[pi];if(!del){el.textContent=p.substring(0,++ci);if(ci===p.length){del=true;setTimeout(type,2000);return}setTimeout(type,65)}else{el.textContent=p.substring(0,--ci);if(ci===0){del=false;pi=(pi+1)%phrases.length;setTimeout(type,400);return}setTimeout(type,35)}}
+setTimeout(type,1800);
+
+// Hero counters
+function cnt(id,target,sfx){const el=document.getElementById(id);if(!el)return;let c=0;const s=target/60;const t=setInterval(()=>{c=Math.min(c+s,target);el.textContent=Math.floor(c)+sfx;if(c>=target)clearInterval(t)},25)}
+new IntersectionObserver(e=>{if(e[0].isIntersecting){cnt('s1',5,'');cnt('s2',5,'');cnt('s3',15,'');e[0].target._obs.disconnect()}},{threshold:.3}).observe(Object.assign(document.getElementById('hero'),{_obs:null}));
+// fix self-ref
+(()=>{const o=new IntersectionObserver(e=>{if(e[0].isIntersecting){cnt('s1',5,'');cnt('s2',5,'');cnt('s3',15,'');o.disconnect()}},{threshold:.2});o.observe(document.getElementById('hero'))})();
+
+// Reveal
+const rObs=new IntersectionObserver(e=>{e.forEach(x=>{if(x.isIntersecting)x.target.classList.add('visible')})},{threshold:.1});
+document.querySelectorAll('.reveal').forEach(el=>rObs.observe(el));
+
+// Skill bars
+const skObs=new IntersectionObserver(e=>{if(e[0].isIntersecting){document.querySelectorAll('.skill-fill').forEach(el=>el.style.width=el.dataset.width+'%');skObs.disconnect()}},{threshold:.25});
+skObs.observe(document.getElementById('about'));
+
+// Project filter
+document.querySelectorAll('.f-btn').forEach(btn=>{btn.addEventListener('click',()=>{document.querySelectorAll('.f-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');const f=btn.dataset.filter;document.querySelectorAll('#projGrid .proj-card').forEach(c=>{const show=f==='all'||c.dataset.tags.includes(f);c.style.display=show?'block':'none'})})});
+
+// KPI counters
+function kpiCnt(id,t,pre,suf){const el=document.getElementById(id);if(!el)return;let c=0;const s=t/60;const iv=setInterval(()=>{c=Math.min(c+s,t);el.textContent=pre+Math.floor(c).toLocaleString()+suf;if(c>=t)clearInterval(iv)},25)}
+const dObs=new IntersectionObserver(e=>{if(e[0].isIntersecting){kpiCnt('kpiRev',9750000,'₦','');kpiCnt('kpiCust',24050,'','');kpiCnt('kpiAov',405,'₦','');kpiCnt('kpiUnits',285000,'','');drawCharts();dObs.disconnect()}},{threshold:.2});
+dObs.observe(document.getElementById('dashboard'));
+
+// Charts
+function drawCharts(){
+  const rc=document.getElementById('revChart');
+  if(!rc)return;
+  const ctx=rc.getContext('2d');
+  rc.width=rc.offsetWidth;rc.height=180;
+  const data=[560,498,683,493,723,691,681,682,1019,1070,1461,433];
+  const months=['J','F','M','A','M','J','J','A','S','O','N','D'];
+  const pw=rc.width,ph=rc.height,pad={l:36,r:16,t:16,b:28};
+  const cw=pw-pad.l-pad.r,ch=ph-pad.t-pad.b;
+  const max=Math.max(...data),min=Math.min(...data);
+  const pts=data.map((v,i)=>({x:pad.l+(i/(data.length-1))*cw,y:pad.t+ch-((v-min)/(max-min))*ch}));
+  ctx.clearRect(0,0,pw,ph);
+  ctx.strokeStyle='rgba(255,255,255,.04)';ctx.lineWidth=1;
+  for(let i=0;i<=4;i++){const y=pad.t+(i/4)*ch;ctx.beginPath();ctx.moveTo(pad.l,y);ctx.lineTo(pw-pad.r,y);ctx.stroke()}
+  const gr=ctx.createLinearGradient(0,pad.t,0,ph);gr.addColorStop(0,'rgba(0,212,255,.22)');gr.addColorStop(1,'rgba(0,212,255,0)');
+  ctx.beginPath();ctx.moveTo(pts[0].x,ph-pad.b);pts.forEach(p=>ctx.lineTo(p.x,p.y));ctx.lineTo(pts[pts.length-1].x,ph-pad.b);ctx.closePath();ctx.fillStyle=gr;ctx.fill();
+  ctx.beginPath();pts.forEach((p,i)=>i===0?ctx.moveTo(p.x,p.y):ctx.lineTo(p.x,p.y));ctx.strokeStyle='#00D4FF';ctx.lineWidth=1.8;ctx.lineJoin='round';ctx.stroke();
+  pts.forEach((p,i)=>{ctx.beginPath();ctx.arc(p.x,p.y,2.5,0,Math.PI*2);ctx.fillStyle='#00D4FF';ctx.fill();ctx.fillStyle='rgba(136,146,164,.65)';ctx.font='9px JetBrains Mono,monospace';ctx.textAlign='center';ctx.fillText(months[i],p.x,ph-8)});
+
+  const sc=document.getElementById('segChart');
+  if(!sc)return;
+  const sctx=sc.getContext('2d');sc.width=sc.offsetWidth;sc.height=180;
+  const segs=[{l:'Netherlands',v:285,c:'#00D4FF'},{l:'EIRE',v:263,c:'#7B2FFF'},{l:'Germany',v:222,c:'#00FF94'},{l:'France',v:197,c:'#FF6B35'},{l:'Australia',v:137,c:'#A855F7'}];
+  const sw=sc.width,sh=sc.height,sp={l:78,r:54,t:14,b:18};
+  const bh=(sh-sp.t-sp.b)/segs.length-5;const maxSeg=Math.max(...segs.map(s=>s.v));
+  sctx.clearRect(0,0,sw,sh);
+  segs.forEach((s,i)=>{const y=sp.t+i*(bh+5);const bw=(s.v/maxSeg)*(sw-sp.l-sp.r);const g2=sctx.createLinearGradient(sp.l,0,sp.l+bw,0);g2.addColorStop(0,s.c);g2.addColorStop(1,s.c+'44');sctx.fillStyle=g2;sctx.beginPath();if(sctx.roundRect)sctx.roundRect(sp.l,y,bw,bh,3);else sctx.rect(sp.l,y,bw,bh);sctx.fill();sctx.fillStyle='rgba(136,146,164,.75)';sctx.font='9.5px JetBrains Mono,monospace';sctx.textAlign='right';sctx.fillText(s.l,sp.l-5,y+bh/2+3.5);sctx.fillStyle=s.c;sctx.textAlign='left';sctx.fillText(s.v+'K',sp.l+bw+5,y+bh/2+3.5)});
+}
+
+// Form
+function submitForm(){
+  let ok=true;
+  const n=document.getElementById('cName').value.trim();
+  const e=document.getElementById('cEmail').value.trim();
+  const m=document.getElementById('cMsg').value.trim();
+  document.querySelectorAll('.f-err').forEach(x=>x.style.display='none');
+  if(!n){document.getElementById('errN').style.display='block';ok=false}
+  if(!e||!/^\S+@\S+\.\S+$/.test(e)){document.getElementById('errE').style.display='block';ok=false}
+  if(!m){document.getElementById('errM').style.display='block';ok=false}
+  if(ok){document.getElementById('fOk').style.display='block';['cName','cEmail','cSubj','cMsg'].forEach(id=>document.getElementById(id).value='');setTimeout(()=>document.getElementById('fOk').style.display='none',5000)}
+}
+</script>
+</body>
+</html>
